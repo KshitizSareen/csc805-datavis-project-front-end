@@ -5,7 +5,6 @@ import {IconLayer} from '@deck.gl/layers';
 import {WebMercatorViewport} from '@deck.gl/core';
 import axios from 'axios';
 
-
 const ICON_MAPPING = {
     marker: {x: 0, y: 0, width: 128, height: 128, mask: true}
   };
