@@ -31,7 +31,7 @@ const booleanFilterValues={
 export default function HomeFilters({chartsLocationDispatch,chartsCategoryDispatch,mapState,resultsDispatch,chartsListingDispatch})
 {
 
-    const [minPrice,setMinPrice]=useState(500);
+    const [minPrice,setMinPrice]=useState(600);
     const [maxPrice,setMaxPrice]=useState(1000);
     const [minSquareFeet,setMinSquareFeet]=useState(500);
     const [maxSquareFeet,setMaxSquareFeet]=useState(1000);
