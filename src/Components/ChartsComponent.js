@@ -5,9 +5,11 @@ import { Chart } from "react-google-charts";
 
 export default function ChartsComponent({chartsByListing,chartsByLocation,chartsByCategory}){
     
+    const [xAxisValue,setXAxisValue] = useState();
+    const [yAxisValue,setYAxisValue] = useState();
     var margin = {top: 50, right: 100, bottom: 50, left: 100};
     const width = window.parent.outerWidth/2.5;
-    const height = window.parent.outerHeight/3;
+    const height = window.parent.outerHeight/4.25;
     const svgWidth = width + margin.left + margin.right;
     const svgHeight =  height + margin.top + margin.bottom;
 
@@ -72,7 +74,6 @@ export default function ChartsComponent({chartsByListing,chartsByLocation,charts
         horizontalBarChartElem.append("text")
    .attr("x", width/2)
    .attr("y", 35)
-   .attr("font-size", "12px")
    .text("Location VS Price")
 
     }
@@ -91,7 +92,6 @@ export default function ChartsComponent({chartsByListing,chartsByLocation,charts
         verticalBarChartElem.append("text")
         .attr("x", width/2)
         .attr("y", 35)
-        .attr("font-size", "12px")
         .text("Price VS Category")
 
         verticalBarChartSvg.append("text")
@@ -121,7 +121,6 @@ export default function ChartsComponent({chartsByListing,chartsByLocation,charts
         lineChartElem.append("text")
         .attr("x", width/2)
         .attr("y", 35)
-        .attr("font-size", "12px")
         .text("Listing Data")
 
         lineSvg.append("text")
@@ -136,6 +135,25 @@ export default function ChartsComponent({chartsByListing,chartsByLocation,charts
         .attr("y", -40)
         .attr("text-anchor", "middle")
         .text("Value");
+
+        /*
+                    <div style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-evenly',
+            alignItems: 'center',
+            width: '20%',
+          }}>
+            <div style={{
+              width: 200,
+              height: 2,
+              backgroundColor: '#4daf4a',
+              alignSelf: 'center',
+              marginBottom: '5%'
+            }}/>
+            <p>Max Price</p>
+            </div>
+            */
     }
 
     useEffect(()=>{
@@ -218,7 +236,13 @@ export default function ChartsComponent({chartsByListing,chartsByLocation,charts
 
         categoryElems
         .enter()
-        .append("rect")
+        .append("rect").on('mouseover',(e,d)=>{
+            setXAxisValue(d.category);
+            setYAxisValue('$'+d.value);
+          }).on('mouseout',()=>{
+            setXAxisValue();
+            setYAxisValue()
+          })
         .merge(categoryElems)
         .transition(t)
           .attr("x", function(d) { if(d.key==="MinPrice") 
@@ -306,7 +330,13 @@ else{
 
         categoryElems
         .enter()
-        .append("rect")
+        .append("rect").on('mouseover',(e,d)=>{
+            setXAxisValue('$'+d.value);
+            setYAxisValue(d.category);
+          }).on('mouseout',()=>{
+            setXAxisValue();
+            setYAxisValue()
+          })
         .merge(categoryElems)
         .transition(t)
           .attr("x",0)
@@ -344,7 +374,8 @@ else{
                 minY=Math.min(minY,categoryElem.Price,categoryElem.Odometer)
                 valueData.push({
                     'value': categoryElem.Odometer,
-                    'index': categoryElem.Index
+                    'index': categoryElem.Index,
+                    'Label': 'Miles'
                 })
             }
             else{
@@ -352,14 +383,16 @@ else{
                 minY=Math.min(minY,categoryElem.Price,categoryElem.SqFeet)
                 valueData.push({
                     'value': categoryElem.SqFeet,
-                    'index': categoryElem.Index
+                    'index': categoryElem.Index,
+                    'Label': 'SqFeet'
                 })
             }
             minX=Math.min(minX,categoryElem.Index)
             maxX=Math.max(maxX,categoryElem.Index)
             priceData.push({
                 'value': categoryElem.Price,
-                'index': categoryElem.Index
+                'index': categoryElem.Index,
+                'Label': '$'
             })
         }
         data=[priceData,valueData]
@@ -397,7 +430,20 @@ else{
 
         var circles=lineSvg.selectAll(".circle").data(circleData)
 
-        circles.enter().append("circle")
+        circles.enter().append("circle").on('mouseover',(e,d)=>{
+            setXAxisValue("Listing ID "+d.index);
+            if(d.Label==="$")
+            {
+            setYAxisValue(d.Label+d.value);
+            }
+            else
+            {
+            setYAxisValue(d.value+" "+d.Label);
+            }
+          }).on('mouseout',()=>{
+            setXAxisValue();
+            setYAxisValue()
+          })
         .attr("class","circle")
         .merge(circles)
         .transition(t)
@@ -437,7 +483,7 @@ else{
 
       
       const options = {
-        title: "Count of Homes By Location",
+        title: "Location By Count",
         backgroundColor: 'transparent'
       };
 
@@ -455,6 +501,8 @@ else{
             alignItems: 'center',
             overflow: 'hidden'
         }}>
+            <div>X-Axis Value: {xAxisValue}</div>
+            <div>Y-Axis Value: {yAxisValue}</div>
             <div style={{
                 display: 'flex',
                 width: window.parent.innerWidth,
@@ -462,6 +510,54 @@ else{
             }}>
             <svg ref={horizontalBarChartRef} width={svgWidth} height={svgHeight}/>
             <svg ref={verticalBarChartRef} width={svgWidth} height={svgHeight}/>
+            </div>
+            <div style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-evenly',
+            alignItems: 'center',
+            width: '20%',
+          }}>
+            <div style={{
+              width: 200,
+              height: 2,
+              backgroundColor: '#e41a1c',
+              alignSelf: 'center',
+              marginBottom: '5%'
+            }}/>
+            <p>Min Price</p>
+            </div>
+            <div style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-evenly',
+            alignItems: 'center',
+            width: '20%',
+          }}>
+            <div style={{
+              width: 200,
+              height: 2,
+              backgroundColor: '#377eb8',
+              alignSelf: 'center',
+              marginBottom: '5%'
+            }}/>
+            <p>Avg Price</p>
+            </div>
+            <div style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-evenly',
+            alignItems: 'center',
+            width: '20%',
+          }}>
+            <div style={{
+              width: 200,
+              height: 2,
+              backgroundColor: '#4daf4a',
+              alignSelf: 'center',
+              marginBottom: '5%'
+            }}/>
+            <p>Max Price</p>
             </div>
             <div style={{
                 display: 'flex',

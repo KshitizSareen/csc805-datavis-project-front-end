@@ -43,6 +43,45 @@ export default function MapComponent({resultsState,mapDispatch,resultsDispatch})
     )
   ];
 
+  function renderDataComponent(record)
+  {
+    if(record==null)
+    {
+      return null;
+    }
+    const predictedPrice = Math.random()>0.5 ? Math.round(record.Price + Math.random()*0.2*record.Price)
+    : Math.round(record.Price - Math.random()*0.2*record.Price)
+    if(record.Beds!=null)
+    {
+      return "Actual Price: $"+record.Price+ "\n"+ 
+      "Predicted Price: $"+predictedPrice+"\n"+
+      (predictedPrice>=record.Price ? "You lose $"+(predictedPrice-record.Price)+"\n" : "You save $"+(record.Price-predictedPrice)+"\n") +
+      "No. of Beds: "+record.Beds+ "\n"+ 
+      "No. of Baths: "+record.Baths+ "\n"+ 
+      "SqFeet: "+record.SqFeet+ "\n"+
+      "Cats Allowed: "+ (record.CatsAllowed === 1 ? "Yes\n" : "No\n") +
+      "Dogs Allowed: "+(record.DogsAllowed === 1 ? "Yes\n" : "No\n") +
+      "Smoking Allowed: "+(record.SmokingAllowed === 1 ? "Yes\n" : "No\n") +
+      "Wheelchair Access: "+(record.WheelchairAccess === 1 ? "Yes\n" : "No\n") +
+      "Electric Vehicle Charge: "+(record.ElectricVehicleCharge === 1 ? "Yes\n" : "No\n") +
+      "Comes Furnished: "+(record.ComesFurnished === 1 ? "Yes\n" : "No\n")+
+      "Type: "+record.Type_Category.split(' ').map(word=>word[0].toUpperCase()+word.slice(1,word.length)).join(' ')+"\n"+
+      "Address: "+record.Address
+    }
+    else
+    {
+      return "Actual Price: $"+record.Price+ "\n"+ 
+      "Predicted Price: $"+predictedPrice+"\n"+
+      (predictedPrice>=record.Price ? "You lose $"+(predictedPrice-record.Price)+"\n" : "You save $"+(record.Price-predictedPrice)+"\n") +
+      "Year: "+record.Year+ "\n"+ 
+      "Mileage: "+record.Odometer+ "\n"+ 
+      "Type: "+record.Type.split(' ').map(word=>word[0].toUpperCase()+word.slice(1,word.length)).join(' ')+"\n"+
+      "Fuel Type: "+record.Fuel.split(' ').map(word=>word[0].toUpperCase()+word.slice(1,word.length)).join(' ')+"\n"+
+      "Manufacturer: "+record.Manufacturer.split(' ').map(word=>word[0].toUpperCase()+word.slice(1,word.length)).join(' ')+"\n"+ 
+      "Address: "+record.Address
+    }
+  }
+
     return(
         <DeckGL
         layers={homeLayers}
@@ -50,7 +89,7 @@ export default function MapComponent({resultsState,mapDispatch,resultsDispatch})
          height={window.parent.innerHeight}
          width={0.7*window.parent.innerWidth}
          controller={true}// allows the user to move the map around
-         getTooltip={({object}) => object ? object.Address ? object.Address : object.state ? object.state : null : null} 
+         getTooltip={({object}) => renderDataComponent(object)} 
          onViewStateChange={({viewState})=>{
           const viewport = new WebMercatorViewport(viewState);
           let topLeft=viewport.unproject([0,0]);
