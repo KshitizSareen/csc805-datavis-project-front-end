@@ -100,7 +100,7 @@ export default function MapComponent({resultsState,mapDispatch,resultsDispatch})
         >
           <Map
             mapStyle="mapbox://styles/mapbox/dark-v11"
-            mapboxAccessToken={'pk.eyJ1Ijoia3NoaXRpejA3IiwiYSI6ImNsYXJrYWZ3NjAwejQ0MW1zYXQ1ZnN5OXYifQ.PnLABlEn-j7hpuGftiJ-LQ'}
+            mapboxAccessToken={'pk.eyJ1Ijoia3NoaXRpejA3IiwiYSI6ImNsYmFrbnF0ajBhaDgzd3BpMnk0Nm84ZGsifQ.uI_5eWkQ7GsYY1J4cDNU1w'}
            />
         </DeckGL>
     )
