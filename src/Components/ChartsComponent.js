@@ -64,7 +64,7 @@ export default function ChartsComponent({chartsByListing,chartsByLocation,charts
         horizontalBarChartSvg.append("text")
         .attr("transform","rotate(-90)")
         .attr("x", -(height/2))
-        .attr("y", -40)
+        .attr("y", -80)
         .attr("text-anchor", "middle")
         .text("Price");
     
@@ -132,7 +132,7 @@ export default function ChartsComponent({chartsByListing,chartsByLocation,charts
         lineSvg.append("text")
         .attr("transform","rotate(-90)")
         .attr("x", -(height/2))
-        .attr("y", -40)
+        .attr("y", -80)
         .attr("text-anchor", "middle")
         .text("Value");
 
