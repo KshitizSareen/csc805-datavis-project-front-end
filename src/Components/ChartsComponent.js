@@ -9,7 +9,7 @@ export default function ChartsComponent({chartsByListing,chartsByLocation,charts
     const [yAxisValue,setYAxisValue] = useState();
     var margin = {top: 50, right: 100, bottom: 50, left: 100};
     const width = window.parent.outerWidth/2.5;
-    const height = window.parent.outerHeight/4.25;
+    const height = window.parent.outerHeight/4.75;
     const svgWidth = width + margin.left + margin.right;
     const svgHeight =  height + margin.top + margin.bottom;
 
